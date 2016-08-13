@@ -13,6 +13,7 @@
 #include "application.h"
 #include "FatFs/FatFs.h"
 #include "FatFs/trampoline.h"
+#include <CException/CException.h>
 
 #ifndef DEBUGLOG
 #define DEBUGLOG(x, y, ...)
@@ -45,7 +46,7 @@ void vPlayAudioTask(void* arg) {
 	for(;;)
 		VS1053b->playInternal();
 	DEBUGLOG(DebugLevel_Trace, "AUDIO: player thread ending");
-	os_thread_cleanup(nullptr);
+	END_THREAD();
 }
 
 template <typename PinType>
@@ -386,7 +387,7 @@ private:
 
 
 	  DEBUGLOG(DebugLevel_DeepTrace, "AUDIO: launching player thread");
-	  os_thread_create(nullptr, "Audio", 3, vPlayAudioTask<VS1053b<PinType>>, this, 2048);
+	  NEW_THREAD(nullptr, "Audio", 3, vPlayAudioTask<VS1053b<PinType>>, this, 2048);
 
 	  _started = true;
 	}

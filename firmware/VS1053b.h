@@ -45,7 +45,7 @@ void vPlayAudioTask(void* arg) {
 	T* VS1053b = (T*)arg;
 	for(;;)
 		VS1053b->playInternal();
-	DEBUGLOG(DebugLevel_Trace, "AUDIO: player thread ending");
+	DEBUGLOG(TRACE, "AUDIO: player thread ending");
 	END_THREAD();
 }
 
@@ -387,7 +387,7 @@ private:
 
 
 	  DEBUGLOG(DebugLevel_DeepTrace, "AUDIO: launching player thread");
-	  NEW_THREAD(nullptr, "Audio", 3, vPlayAudioTask<VS1053b<PinType>>, this, 2048);
+	  os_thread_create(nullptr, "Audio", 3, vPlayAudioTask<VS1053b<PinType>>, this, 2048);
 
 	  _started = true;
 	}
